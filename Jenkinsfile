@@ -1,15 +1,33 @@
 pipeline {
-        agent {
-                docker {
-                        image 'maven:3-alpine'
-                        args '-v /root/.m2:/root/.m2'
+
+  agent { 
+    node { label 'master'} 
+  }
+
+  stages{
+        stage('FirstStage') {
+            steps {
+                script{
+                    os = sh script: 'cat /etc/os-release', returnStdout:true
+                    echo os
                 }
+            }
         }
-        stages {
-                stage('Build') {
-                        steps {
-                                sh 'mvn -B -DskipTests clean package'
-                        }
+        stage('SecondStage'){
+            steps {
+                script{
+                    dns = sh script: 'cat /etc/resolve-conf', returnStdout:true
+                    echo dns
                 }
+            }
         }
+        stage('ThirdStage'){
+            steps {
+                script{
+                    logs = sh script: 'cat /var/log/syslog ', returnStdout:true
+                    echo logs
+                }
+            }
+        }
+  }
 }
