@@ -16,7 +16,7 @@ pipeline {
         stage('SecondStage'){
             steps {
                 script{
-                    dns = sh script: 'cat /etc/resolve-conf', returnStdout:true
+                    dns = sh script: 'cat /etc/resolvconf', returnStdout:true
                     echo dns
                 }
             }
