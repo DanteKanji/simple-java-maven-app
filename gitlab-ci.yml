@@ -1,0 +1,25 @@
+stages:
+  -test
+  -deploy
+  
+cache:
+  paths:
+    - vendor/
+    - node_modules/
+    - storage/framework/cache
+
+variables:
+  DEPLOYMENT_PATH: /usr/local/my_project
+  PROJECT_ROOT: root/gitlab-runner/my_project
+  
+my_project_test:
+  stage: test
+  script:
+    - composer install
+    - php vendor/bin/phpunit --colors
+    
+my_project_deploy:
+  stage: deploy
+  script:
+    - rsync -a -e 'ssh -p 1881' --delete-before -r ${PROJECT_ROOT}/*
+root@STAGE_SERVER:${DEPLOYMENT_PATH}
